@@ -1,36 +1,118 @@
 body {
   font-family: Arial, sans-serif;
-  background: #f4f6f8;
-  text-align: center;
+  max-width: 600px;
+  margin: 40px auto;
+  padding: 0 20px;
+  background: #f9f9f9;
+  color: #333;
 }
 
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
+h1 {
+  color: #2d6a4f;
+  font-size: 2.5rem;
+  margin: 0 0 5px;
 }
 
 form {
-  margin-bottom: 20px;
+  margin: 20px 0;
+  display: flex;
+  gap: 10px;
 }
 
 input {
+  flex: 1;
   padding: 10px;
-  width: 70%;
+  font-size: 16px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+input:focus {
+  outline: none;
+  border-color: #2d6a4f;
 }
 
 button {
-  padding: 10px;
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #2d6a4f;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-.result-card {
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  margin-top: 10px;
+button:hover {
+  background: #245a41;
 }
 
-.error {
-  color: red;
+.word-card {
+  background: #fff;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+.word-card h2 {
+  font-size: 1.8rem;
+  margin: 0 0 5px;
+}
+
+.phonetic {
+  color: #777;
+  font-style: italic;
+  margin: 0 0 15px;
+}
+
+.part-of-speech {
+  font-weight: 700;
+  color: #2d6a4f;
+  margin-top: 15px;
+}
+
+.definition {
+  margin: 8px 0;
+}
+
+.example {
+  color: #555;
+  font-style: italic;
+  margin: 5px 0 10px 10px;
+}
+
+.synonyms {
+  margin-top: 8px;
+  color: #555;
+}
+
+.audio-btn {
+  padding: 6px 14px;
+  font-size: 14px;
+  background: #fff;
+  color: #2d6a4f;
+  border: 1px solid #2d6a4f;
+  border-radius: 20px;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+.audio-btn:hover {
+  background: #d8f3dc;
+}
+
+.audio-btn:focus,
+button:focus,
+input:focus {
+  outline: 2px solid rgba(45, 106, 79, 0.35);
+  outline-offset: 2px;
+}
+
+.error-message {
+  background: #fff0f0;
+  border: 1px solid #f5c2c2;
+  color: #a02020;
+  padding: 15px;
+  border-radius: 6px;
+  margin-top: 20px;
 }

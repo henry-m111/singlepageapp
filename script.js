@@ -1,59 +1,93 @@
-const form = document.getElementById("searchForm");
-const input = document.getElementById("wordInput");
-const result = document.getElementById("result");
-
-form.addEventListener("submit", function(e) {
+document.getElementById('search-form').addEventListener('submit', function (e) {
   e.preventDefault();
-  const word = input.value.trim();
 
+  const word = document.getElementById('word-input').value.trim();
   if (!word) {
-    showError("Please enter a word.");
+    alert('Please enter a word!');
     return;
   }
 
-  fetchWord(word);
+  getWordInfo(word);
 });
 
-function fetchWord(word) {
-  fetch(`https://api.dictionaryapi.dev/api/v2/entries/en/${word}`)
-    .then(res => {
-      if (!res.ok) {
-        throw new Error("Word not found");
-      }
-      return res.json();
-    })
-    .then(data => displayResult(data))
-    .catch(err => showError(err.message));
+async function getWordInfo(word) {
+  const url = 'https://api.dictionaryapi.dev/api/v2/entries/en/' + word;
+
+  try {
+    const response = await fetch(url);
+    const data = await response.json();
+
+    if (data.title === 'No Definitions Found') {
+      showError(word);
+      return;
+    }
+
+    showResults(data[0]);
+  } catch (err) {
+    showError(word);
+  }
 }
 
-function displayResult(data) {
-  const wordData = data[0];
+function showResults(wordData) {
+  const container = document.getElementById('result-container');
 
   const word = wordData.word;
-  const phonetic = wordData.phonetic || "N/A";
+  const phonetic = wordData.phonetic || '';
+
   const meaning = wordData.meanings[0];
-  const definition = meaning.definitions[0].definition;
-  const example = meaning.definitions[0].example || "No example available.";
-  const synonyms = meaning.synonyms?.join(", ") || "None";
+  const partOfSpeech = meaning.partOfSpeech;
 
-  const audio = wordData.phonetics.find(p => p.audio)?.audio;
+  const definitionObj = meaning.definitions[0];
+  const definition = definitionObj.definition;
+  const example = definitionObj.example || '';
 
-  result.innerHTML = `
-    <div class="result-card">
-      <h2>${word}</h2>
-      <p><strong>Pronunciation:</strong> ${phonetic}</p>
-      <p><strong>Definition:</strong> ${definition}</p>
-      <p><strong>Example:</strong> ${example}</p>
-      <p><strong>Synonyms:</strong> ${synonyms}</p>
-      ${
-        audio 
-        ? `<audio controls src="${audio}"></audio>` 
-        : "<p>No audio available</p>"
-      }
-    </div>
-  `;
+  const synonyms = meaning.synonyms || [];
+
+  let audioUrl = '';
+  for (let i = 0; i < (wordData.phonetics || []).length; i++) {
+    const audioCandidate = wordData.phonetics[i].audio;
+    if (audioCandidate) {
+      audioUrl = audioCandidate;
+      break;
+    }
+  }
+
+  let html = '<div class="word-card">';
+  html += '<h2>' + word + '</h2>';
+
+  if (phonetic) {
+    html += '<p class="phonetic">' + phonetic + '</p>';
+  }
+
+  if (audioUrl) {
+    html += '<button class="audio-btn" onclick="playAudio(\'' + audioUrl + '\')">▶ Listen</button>';
+  }
+
+  html += '<p class="part-of-speech">' + partOfSpeech + '</p>';
+  html += '<p class="definition">' + definition + '</p>';
+
+  if (example) {
+    html += '<p class="example">"' + example + '"</p>';
+  }
+
+  if (synonyms.length > 0) {
+    html += '<p class="synonyms"><strong>Synonyms:</strong> ' + synonyms.slice(0, 5).join(', ') + '</p>';
+  }
+
+  html += '</div>';
+
+  container.innerHTML = html;
 }
 
-function showError(message) {
-  result.innerHTML = `<p class="error">${message}</p>`;
+function showError(word) {
+  const container = document.getElementById('result-container');
+  container.innerHTML =
+    '<div class="error-message">Oops! We couldn\'t find "' +
+    word +
+    '". Try another word.</div>';
+}
+
+function playAudio(url) {
+  const audio = new Audio(url);
+  audio.play();
 }
