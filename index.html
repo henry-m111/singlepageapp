@@ -1,34 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Wordly - Dictionary App</title>
-    <link rel="stylesheet" href="style.css" />
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <title>Wordly Dictionary</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
 
-  <body>
-    <main>
-      <header>
-        <h1>Wordly</h1>
-        <p>Look up any English word in seconds.</p>
-      </header>
+  <h1>Wordly</h1>
 
-      <section aria-label="Word search">
-        <form id="search-form">
-          <input
-            type="text"
-            id="word-input"
-            placeholder="Enter a word..."
-            autocomplete="off"
-          />
-          <button type="submit">Search</button>
-        </form>
-      </section>
+  
+  <form id="search-form">
+    <input type="text" id="word-input" placeholder="Search a word..." />
+    <button type="submit">Search</button>
+  </form>
 
-      <section id="result-container" aria-live="polite"></section>
-    </main>
+  
+  <p id="error-message"></p>
 
-    <script src="script.js"></script>
-  </body>
+  
+  <div id="results"></div>
+
+  <script src="app.js"></script>
+</body>
 </html>
