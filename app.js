@@ -1,67 +1,48 @@
-const form = document.getElementById('search-form');
-const wordInput = document.getElementById('word-input');
-const results = document.getElementById('results');
-const errorMessage = document.getElementById('error-message');
+const button = document.getElementById("searchBtn");
 
-form.addEventListener('submit', function(event) {
-  event.preventDefault();
-  function displayResults(data) {
-  const word = data.word;
-  const phonetic = data.phonetic || 'No pronunciation available';
-const audioUrl = data.phonetics.find(function(p) { return p.audio; });
-  const meanings = data.meanings;
+button.addEventListener("click", searchWord);
 
-  let html = '<h2>' + word + '</h2>';
-  html += '<p><em>' + phonetic + '</em></p>';
+function searchWord() {
+  const word = document.getElementById("wordInput").value.trim();
 
-if (audioUrl) {
-  html += '<audio controls src="' + audioUrl.audio + '"></audio>';
-}
+  // Clear old messages
+  document.getElementById("error").textContent = "";
 
-  meanings.forEach(function(meaning) {
-    html += '<h3>' + meaning.partOfSpeech + '</h3>';
-    const synonyms = meanings[0].synonyms;
-
-if (synonyms && synonyms.length > 0) {
-  html += '<h3>Synonyms</h3>';
-  html += '<p>' + synonyms.slice(0, 5).join(', ') + '</p>';
-}
-
-    meaning.definitions.slice(0, 3).forEach(function(def) {
-      html += '<p>• ' + def.definition + '</p>';
-
-      if (def.example) {
-        html += '<p><small>Example: ' + def.example + '</small></p>';
-      }
-    });
-  });
-
-  results.innerHTML = html;
-}
-
-  const word = wordInput.value.trim();
-
-  if (word === '') {
-    errorMessage.textContent = 'Please enter a word.';
+  if (word === "") {
+    document.getElementById("error").textContent = "Please enter a word.";
     return;
   }
 
-  errorMessage.textContent = '';
-  results.innerHTML = '';
-
-  fetch('https://api.dictionaryapi.dev/api/v2/entries/en/' + word)
-    .then(function(response) {
+  fetch("https://api.dictionaryapi.dev/api/v2/entries/en/" + word)
+    .then(response => {
       if (!response.ok) {
-        throw new Error('Word not found');
+        throw new Error("Word not found");
       }
       return response.json();
     })
-    .then(function(data) {
-      displayResults(data[0]);;
+    .then(data => {
+      const info = data[0];
+
+      const meaning = info.meanings[0];
+      const definition = meaning.definitions[0];
+
+      document.getElementById("word").textContent = info.word;
+      document.getElementById("partOfSpeech").textContent =
+        "Part of Speech: " + meaning.partOfSpeech;
+
+      document.getElementById("definition").textContent =
+        "Definition: " + definition.definition;
+
+      document.getElementById("example").textContent =
+        "Example: " + (definition.example || "No example available");
     })
-    .catch(function(error) {
-  errorMessage.textContent = 'Word not found. Please try another word.';
-  results.innerHTML = '';
-});
+    .catch(error => {
+      document.getElementById("error").textContent = error.message;
+
+      // Clear results if error
+      document.getElementById("word").textContent = "";
+      document.getElementById("partOfSpeech").textContent = "";
+      document.getElementById("definition").textContent = "";
+      document.getElementById("example").textContent = "";
     });
-});
+}
