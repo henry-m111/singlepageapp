@@ -53,17 +53,14 @@ function searchWord() {
       defEl.textContent = "Definition: " + (definition?.definition || "N/A");
       exEl.textContent = "Example: " + (definition?.example || "No example available");
 
-      // Synonyms
       const synonyms = meaning?.synonyms || [];
       synEl.textContent = "Synonyms: " + (synonyms.length ? synonyms.join(", ") : "None");
 
-      // Audio pronunciation
       const audio = info.phonetics?.find(p => p.audio)?.audio;
       if (audio) {
         audioEl.src = audio;
       }
 
-      // Dynamic styling (SPA requirement)
       document.body.style.backgroundColor = "#e6f7ff";
     })
     .catch(error => {
