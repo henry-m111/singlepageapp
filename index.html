@@ -35,8 +35,11 @@
 
   <h1>📘 Wordly Dictionary</h1>
 
-  <input type="text" id="wordInput" placeholder="Enter a word">
-  <button id="searchBtn">Search</button>
+  <!-- FORM added (SPA fix) -->
+  <form id="form">
+    <input type="text" id="wordInput" placeholder="Enter a word">
+    <button type="submit">Search</button>
+  </form>
 
   <div id="error"></div>
 
@@ -45,9 +48,13 @@
     <p id="partOfSpeech"></p>
     <p id="definition"></p>
     <p id="example"></p>
+    <p id="synonyms"></p>
+
+    <!-- Audio added -->
+    <audio id="audio" controls></audio>
   </div>
 
-  <script src="script.js"></script>
+  <script src="app.js"></script>
 
 </body>
 </html>
